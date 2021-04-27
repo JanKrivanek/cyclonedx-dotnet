@@ -27,8 +27,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CycloneDX.Core\CycloneDX.Core.csproj" />
-  </ItemGroup>
-
 </Project>

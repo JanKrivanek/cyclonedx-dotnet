@@ -127,6 +127,8 @@ namespace CycloneDX.Services
                     if (xmlStream != null) nuspecReader = new NuspecReader(xmlStream);
                 }
 
+                Console.WriteLine($"source: {nupkgUrl}");
+
                 using (var stream = await _httpClient.GetStreamWithStatusCheckAsync(nupkgUrl).ConfigureAwait(false))
                 {
                     if (stream != null) hashBytes = ComputeSha215Hash(stream);
@@ -152,11 +154,15 @@ namespace CycloneDX.Services
 
                 if (_fileSystem.File.Exists(shaFilename))
                 {
+                    Console.WriteLine($"source: {shaFilename}");
+
                     string base64Hash = _fileSystem.File.ReadAllText(shaFilename);
                     hashBytes = Convert.FromBase64String(base64Hash);
                 }
                 else if (_fileSystem.File.Exists(nupkgFilename))
                 {
+                    Console.WriteLine($"source: {nupkgFilename}");
+
                     using (var nupkgStream = _fileSystem.File.OpenRead(nupkgFilename))
                     {
                         hashBytes = ComputeSha215Hash(nupkgStream);
