@@ -109,11 +109,12 @@ namespace CycloneDX.Services
             // nugets on nugets.org are signed with repo signature, so hash is different from nugets
             // coming with SDK
             // SDKs can differ between platforms, so to be properly crossplatform we should not use that
-            //var fallbackLocation = GetNuGetFallbackFolderPath();
+            var fallbackLocation = GetNuGetFallbackFolderPath();
 
-            if (cacheLocation.Success)
+            if (cacheLocation.Success && fallbackLocation.Success)
             {
                 result.Add(cacheLocation.Result);
+                if (fallbackLocation.Result != null) result.Add(fallbackLocation.Result);
                 return new DotnetUtilsResult<List<string>>
                 {
                     Result = result
@@ -123,6 +124,7 @@ namespace CycloneDX.Services
             {
                 var errorMessage = "";
                 errorMessage = CombineErrorMessages(errorMessage, cacheLocation.ErrorMessage);
+                errorMessage = CombineErrorMessages(errorMessage, fallbackLocation.ErrorMessage);
                 return new DotnetUtilsResult<List<string>>
                 {
                     ErrorMessage = errorMessage
